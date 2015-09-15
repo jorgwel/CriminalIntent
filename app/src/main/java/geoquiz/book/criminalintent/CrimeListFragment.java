@@ -38,12 +38,6 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI(null);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,23 +46,27 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI(null);
+        updateUI();
 
         return view;
     }
 
     private void updateUI(UUID crimeId) {
 
-        if(mAdapter == null) {
-            CrimeLab crimeLab = CrimeLab.get(getActivity());
-            List<Crime> crimes =  crimeLab.getCrimes();
-            mAdapter = new CrimeAdapter(crimes);
-            mCrimeRecyclerView.setAdapter(mAdapter);
-        } else if(crimeId != null){
+        if(crimeId != null){
             int i = CrimeLab.get(getActivity()).getCrimeIndex(crimeId);
             mAdapter.notifyItemChanged(i);
         }
 
+    }
+
+    private void updateUI() {
+        if(mAdapter == null) {
+            CrimeLab crimeLab = CrimeLab.get(getActivity());
+            List<Crime> crimes = crimeLab.getCrimes();
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }
     }
 
 
