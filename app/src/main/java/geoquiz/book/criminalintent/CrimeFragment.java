@@ -1,5 +1,7 @@
 package geoquiz.book.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -94,5 +96,14 @@ public class CrimeFragment extends Fragment{
                 mSolvedCheckBox.setChecked(isChecked);
             }
         });
+        setResultForCallerObject();
     }
+
+    private void setResultForCallerObject() {
+        Intent data = new Intent();
+        data.putExtra(Constants.KEY_FOR_CRIME_ID_RESULT_FROM_DETAIL_VIEW, mCrime.getId());
+        getActivity().setResult(Activity.RESULT_OK, data);
+    }
+
+
 }

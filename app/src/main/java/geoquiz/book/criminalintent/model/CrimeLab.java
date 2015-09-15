@@ -48,4 +48,13 @@ public class CrimeLab {
     }
 
 
+    public int getCrimeIndex(UUID crimeId) {
+        for (int i = 0; i < mCrimes.size(); i++) {
+            Crime currentCrime = mCrimes.get(i);
+            if(crimeId.equals(currentCrime.getId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

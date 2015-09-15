@@ -1,5 +1,6 @@
 package geoquiz.book.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 import geoquiz.book.criminalintent.model.Crime;
 import geoquiz.book.criminalintent.model.CrimeLab;
@@ -22,14 +23,25 @@ import geoquiz.book.criminalintent.model.CrimeLab;
  * Created by jorge.bautista on 11/09/15.
  */
 public class CrimeListFragment extends Fragment {
+    private static final String TAG = "CrimeListFragment";
+    private static final int REQUEST_CODE_WAS_CRIME_MODIFIED = 1;
+//    private int indexToUpdateOnReturnFromDetailView = -1;
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE_WAS_CRIME_MODIFIED && resultCode == Activity.RESULT_OK) {
+            UUID crimeId = (UUID)data.getSerializableExtra(Constants.KEY_FOR_CRIME_ID_RESULT_FROM_DETAIL_VIEW);
+            updateUI(crimeId);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        updateUI(null);
     }
 
     @Nullable
@@ -40,21 +52,21 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        updateUI(null);
 
         return view;
     }
 
-    private void updateUI() {
-
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
-        List<Crime> crimes =  crimeLab.getCrimes();
+    private void updateUI(UUID crimeId) {
 
         if(mAdapter == null) {
+            CrimeLab crimeLab = CrimeLab.get(getActivity());
+            List<Crime> crimes =  crimeLab.getCrimes();
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
+        } else if(crimeId != null){
+            int i = CrimeLab.get(getActivity()).getCrimeIndex(crimeId);
+            mAdapter.notifyItemChanged(i);
         }
 
     }
@@ -88,7 +100,8 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent i = CrimeActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE_WAS_CRIME_MODIFIED);
+//            indexToUpdateOnReturnFromDetailView = getAdapterPosition();
         }
     }
 
