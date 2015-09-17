@@ -24,6 +24,7 @@ public class DatePickerFragment extends DialogFragment {
     private static final String ARG_DATE = "date";
     public static final String EXTRA_DATE = "com.libro.regresarafragento.target.date";
 
+
     private DatePicker mDatePicker;
 
     public static DatePickerFragment newInstance(Date date) {
