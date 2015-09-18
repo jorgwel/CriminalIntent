@@ -3,14 +3,11 @@ package geoquiz.book.criminalintent;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.UUID;
 
@@ -59,10 +55,8 @@ public class CrimeFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TAG", "Fui creado");
         UUID crimeId = (UUID)getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
-        Log.d("TAG", "TimePiker:, mCrime" + mCrime + ", date: " + mCrime.getDate() + ", time: " + mCrime.getTime());
     }
 
     @Nullable
@@ -88,10 +82,8 @@ public class CrimeFragment extends Fragment{
             updateDate(mCrime.getDate());
 
         } else if(requestCode == REQUEST_TIME) {
-            Log.d("TimePicker:", "En onActivityResult: " + mCrime.getTime());
             Date d = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
             mCrime.setTime(d);
-            Log.d("TimePicker:", "En onActivityResult: " + mCrime.getTime());
             updateTime(mCrime.getTime());
 
         }

@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TimePicker;
@@ -17,6 +15,8 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import geoquiz.book.criminalintent.util.Util;
 
 /**
  * Created by jorge.bautista on 17/09/15.
@@ -51,10 +51,9 @@ public class TimePickerFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int hour = mTimePicker.getHour();
-                        Log.d("TimePicker", "AT return hour " + hour);
-                        int minute = mTimePicker.getMinute();
-                        Log.d("TimePicker", "AT return minute " + minute);
+                        int hour = Util.getHourATA(mTimePicker);
+                        int minute = Util.getMinuteATA(mTimePicker);
+
                         Date date = new GregorianCalendar(2015, 2, 2, hour, minute, 0).getTime();
                         sendResult(Activity.RESULT_OK, date);
                     }
@@ -65,6 +64,7 @@ public class TimePickerFragment extends DialogFragment {
 
     }
 
+
     private void sendResult(int resultCode, Date date) {
 
         if (getTargetFragment() == null) {
@@ -73,7 +73,6 @@ public class TimePickerFragment extends DialogFragment {
 
         Intent i = new Intent();
         i.putExtra(EXTRA_TIME, date);
-        Log.d("TimePicker sendRes: ", "Date: " + date);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
 
@@ -81,14 +80,15 @@ public class TimePickerFragment extends DialogFragment {
 
     private void setTimeOnTimePicker() {
         Date date = (Date) getArguments().getSerializable(ARG_TIME);
-        Log.d("TimePicker: ", "Date: " + date);
+
         Calendar c = Calendar.getInstance();
         c.setTime(date);
 
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-        mTimePicker.setHour(hour);
-        mTimePicker.setMinute(minute);
+
+        Util.setHourATA(mTimePicker, hour);
+        Util.setMinuteATA(mTimePicker, minute);
 
     }
 
