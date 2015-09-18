@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import geoquiz.book.criminalintent.util.Util;
+import geoquiz.book.criminalintent.util.ApiRelatedImp;
 
 /**
  * Created by jorge.bautista on 17/09/15.
@@ -51,8 +51,8 @@ public class TimePickerFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int hour = Util.getHourATA(mTimePicker);
-                        int minute = Util.getMinuteATA(mTimePicker);
+                        int hour = ApiRelatedImp.getHourATA(mTimePicker);
+                        int minute = ApiRelatedImp.getMinuteATA(mTimePicker);
 
                         Date date = new GregorianCalendar(2015, 2, 2, hour, minute, 0).getTime();
                         sendResult(Activity.RESULT_OK, date);
@@ -87,8 +87,8 @@ public class TimePickerFragment extends DialogFragment {
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
-        Util.setHourATA(mTimePicker, hour);
-        Util.setMinuteATA(mTimePicker, minute);
+        ApiRelatedImp.setHourATA(mTimePicker, hour);
+        ApiRelatedImp.setMinuteATA(mTimePicker, minute);
 
     }
 
