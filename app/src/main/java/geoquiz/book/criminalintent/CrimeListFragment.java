@@ -17,6 +17,7 @@ import java.util.List;
 
 import geoquiz.book.criminalintent.model.Crime;
 import geoquiz.book.criminalintent.model.CrimeLab;
+import geoquiz.book.criminalintent.util.Util;
 
 /**
  * Created by jorge.bautista on 11/09/15.
@@ -81,7 +82,7 @@ public class CrimeListFragment extends Fragment {
         private void bindCrime(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(Util.formatDate(mCrime.getDate()) + ", " + Util.formatTime(mCrime.getTime()));
             mSolvedCheckBox.setChecked(mCrime.isSolved());
         }
 

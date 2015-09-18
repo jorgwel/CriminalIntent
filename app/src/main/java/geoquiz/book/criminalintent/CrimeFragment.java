@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import geoquiz.book.criminalintent.model.Crime;
 import geoquiz.book.criminalintent.model.CrimeLab;
+import geoquiz.book.criminalintent.util.Util;
 
 /**
  * Created by jorge.bautista on 10/09/15.
@@ -98,24 +99,17 @@ public class CrimeFragment extends Fragment{
     }
 
     private void updateTime(Date time) {
-        String fTime = formatTime(time);
+        String fTime = Util.formatTime(time);
         mTimeButton.setText(fTime);
     }
 
-    private String formatTime(Date time) {
-        return DateFormat.format("H:m", time).toString();
-    }
-
     private void updateDate(Date date) {
-        String fDate = formatDate(date);
+        String fDate = Util.formatDate(date);
         mDateButton.setText(fDate);
     }
 
 
-    @NonNull
-    private String formatDate(Date date) {
-        return DateFormat.format("MMM d, yyyy", date).toString();
-    }
+
 
     private void assembleComponents(View v) {
         mTitleField = (EditText)v.findViewById(R.id.crime_title);
