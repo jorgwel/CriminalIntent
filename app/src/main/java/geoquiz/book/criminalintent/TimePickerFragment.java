@@ -3,11 +3,13 @@ package geoquiz.book.criminalintent;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TimePicker;
@@ -50,21 +52,36 @@ public class TimePickerFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int hour = mTimePicker.getHour();
+                        Log.d("TimePicker", "AT return hour " + hour);
                         int minute = mTimePicker.getMinute();
-                        Date date = new GregorianCalendar
-                                Falta esto y ya ...creo
+                        Log.d("TimePicker", "AT return minute " + minute);
+                        Date date = new GregorianCalendar(2015, 2, 2, hour, minute, 0).getTime();
                         sendResult(Activity.RESULT_OK, date);
                     }
                 })
                         //.setView(R.layout.dialog_date)
-                .setView(datePickerView)
+                .setView(timePickerView)
                 .create();
+
+    }
+
+    private void sendResult(int resultCode, Date date) {
+
+        if (getTargetFragment() == null) {
+            return;
+        }
+
+        Intent i = new Intent();
+        i.putExtra(EXTRA_TIME, date);
+        Log.d("TimePicker sendRes: ", "Date: " + date);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
 
     }
 
     private void setTimeOnTimePicker() {
         Date date = (Date) getArguments().getSerializable(ARG_TIME);
-
+        Log.d("TimePicker: ", "Date: " + date);
         Calendar c = Calendar.getInstance();
         c.setTime(date);
 

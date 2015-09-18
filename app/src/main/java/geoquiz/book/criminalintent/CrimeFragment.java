@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +58,10 @@ public class CrimeFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TAG", "Fui creado");
         UUID crimeId = (UUID)getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+        Log.d("TAG", "TimePiker:, mCrime" + mCrime + ", date: " + mCrime.getDate() + ", time: " + mCrime.getTime());
     }
 
     @Nullable
@@ -84,9 +87,10 @@ public class CrimeFragment extends Fragment{
             updateDate(mCrime.getDate());
 
         } else if(requestCode == REQUEST_TIME) {
-
+            Log.d("TimePicker:", "En onActivityResult: " + mCrime.getTime());
             Date d = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
             mCrime.setTime(d);
+            Log.d("TimePicker:", "En onActivityResult: " + mCrime.getTime());
             updateTime(mCrime.getTime());
 
         }
@@ -147,7 +151,7 @@ public class CrimeFragment extends Fragment{
 
 
         mTimeButton = (Button)v.findViewById(R.id.crime_time_button);
-//        updateDate(mCrime.getDate());
+        updateTime(mCrime.getTime());
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
