@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import geoquiz.book.criminalintent.util.Util;
  * Created by jorge.bautista on 10/09/15.
  */
 public class CrimeFragment extends Fragment{
+
+    private static final String TAG =  "CrimeFragment";
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE= "DialogDate";
@@ -70,7 +73,6 @@ public class CrimeFragment extends Fragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -128,10 +130,11 @@ public class CrimeFragment extends Fragment{
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager f = getFragmentManager();
-                DatePickerFragment d = DatePickerFragment.newInstance(mCrime.getDate());
-                d.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
-                d.show(f, DIALOG_DATE);
+                startActivityForResult(DatePickerActivity.newIntent(getActivity(), mCrime.getId()), REQUEST_DATE);
+//                FragmentManager f = getFragmentManager();
+//                DatePickerFragment d = DatePickerFragment.newInstance(mCrime.getDate());
+//                d.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+//                d.show(f, DIALOG_DATE);
             }
         });
 
@@ -160,5 +163,7 @@ public class CrimeFragment extends Fragment{
             }
         });
     }
+
+
 
 }

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import java.util.GregorianCalendar;
  * Created by jorge.bautista on 17/09/15.
  */
 public class DatePickerFragment extends DialogFragment {
+
+    private static final String TAG = "DatePickerFragment";
 
     private static final String ARG_DATE = "date";
     public static final String EXTRA_DATE = "com.libro.regresarafragento.target.date";
@@ -104,7 +107,13 @@ public class DatePickerFragment extends DialogFragment {
     }
 
     private void sendResult(int resultCode, Date date) {
+
         if(getTargetFragment() == null) {
+            Intent i = new Intent();
+            i.putExtra(EXTRA_DATE, date);
+            getActivity().setResult(resultCode, i);
+            getActivity().finish();
+
             return;
         }
 
