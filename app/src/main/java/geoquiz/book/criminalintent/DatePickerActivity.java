@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import geoquiz.book.criminalintent.model.CrimeLab;
+import geoquiz.book.criminalintent.util.Util;
 
 public class DatePickerActivity extends SingleFragmentActivityAbstract {
 
@@ -33,15 +34,17 @@ public class DatePickerActivity extends SingleFragmentActivityAbstract {
 
     @Override
     protected void preprocessing() {
-        boolean tabletSize = getResources().getDe
-        if (tabletSize) {
-            // do something
+
+
+        if (Util.isTablet(this)) {
+            Log.d(TAG, "Es una tableta");
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
-            // do something else
+            Log.d(TAG, "Es un teléfono");
         }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
     }
 
     @Override
