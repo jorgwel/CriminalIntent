@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 
 import java.util.Date;
@@ -20,10 +21,27 @@ public class DatePickerActivity extends SingleFragmentActivityAbstract {
     private static final String TAG = "DatePickerActivity";
     private final static String EXTRA_CRIME_ID =  "extra crime id on date picker activity";
 
+
+
     public static Intent newIntent(Context packageContext, UUID crimeId){
+
         Intent i = new Intent(packageContext, DatePickerActivity.class);
         i.putExtra(EXTRA_CRIME_ID, crimeId);
+
         return i;
+    }
+
+    @Override
+    protected void preprocessing() {
+        boolean tabletSize = getResources().getDe
+        if (tabletSize) {
+            // do something
+        } else {
+            // do something else
+        }
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     @Override

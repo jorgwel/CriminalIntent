@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentManager;
  */
 public abstract class SingleFragmentActivityAbstract extends FragmentActivity {
 
+    protected abstract void preprocessing();
+
     protected abstract Fragment createFragment();
 
     @Override
@@ -26,6 +28,7 @@ public abstract class SingleFragmentActivityAbstract extends FragmentActivity {
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+        preprocessing();
 
     }
 
