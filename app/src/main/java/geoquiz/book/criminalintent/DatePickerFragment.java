@@ -28,16 +28,18 @@ public class DatePickerFragment extends DialogFragment {
     private static final String TAG = "DatePickerFragment";
 
     private static final String ARG_DATE = "date";
+    private static final String ARG_IS_TABLET = "isTablet";
     public static final String EXTRA_DATE = "com.libro.regresarafragento.target.date";
 
 
     private DatePicker mDatePicker;
     private Button mOkButton;
 
-    public static DatePickerFragment newInstance(Date date) {
+    public static DatePickerFragment newInstance(Date date, boolean isTablet) {
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_DATE, date);
+        args.putBoolean(ARG_IS_TABLET, isTablet);
 
         DatePickerFragment f = new DatePickerFragment();
         f.setArguments(args);
@@ -48,6 +50,10 @@ public class DatePickerFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if(getArguments().getBoolean(ARG_IS_TABLET)){
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
 
         View datePickerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
         mDatePicker = (DatePicker) datePickerView.findViewById(R.id.dialog_date_date_picker);
@@ -70,30 +76,34 @@ public class DatePickerFragment extends DialogFragment {
         return datePickerView;
     }
 
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//
-//        View datePickerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
-//        mDatePicker = (DatePicker) datePickerView.findViewById(R.id.dialog_date_date_picker);
-//        setDateOnTimePicker();
-//
-//        return new AlertDialog.Builder(getActivity())
-//                .setTitle(R.string.date_picker_title)
-//                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        int year = mDatePicker.getYear();
-//                        int month = mDatePicker.getMonth();
-//                        int day = mDatePicker.getDayOfMonth();
-//                        Date date = new GregorianCalendar(year, month, day).getTime();
-//                        sendResult(Activity.RESULT_OK, date);
-//                    }
-//                })
-//                //.setView(R.layout.dialog_date)
-//                .setView(datePickerView)
-//                .create();
-//    }
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        if(!getArguments().getBoolean(ARG_IS_TABLET)){
+            return super.onCreateDialog(savedInstanceState);
+        }
+
+        View datePickerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
+        mDatePicker = (DatePicker) datePickerView.findViewById(R.id.dialog_date_date_picker);
+        setDateOnTimePicker();
+
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.date_picker_title)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int year = mDatePicker.getYear();
+                        int month = mDatePicker.getMonth();
+                        int day = mDatePicker.getDayOfMonth();
+                        Date date = new GregorianCalendar(year, month, day).getTime();
+                        sendResult(Activity.RESULT_OK, date);
+                    }
+                })
+                //.setView(R.layout.dialog_date)
+                .setView(datePickerView)
+                .create();
+    }
 
     private void setDateOnTimePicker() {
         Date date = (Date) getArguments().getSerializable(ARG_DATE);
