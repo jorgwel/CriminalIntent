@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     >
 
     <DatePicker
@@ -18,7 +19,7 @@
         android:id="@+id/ok_button_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
         style="?android:attr/buttonBarButtonStyle"
-        android:text="@string/ok"/>
+        android:text="@string/ok"
+        />
 </LinearLayout>

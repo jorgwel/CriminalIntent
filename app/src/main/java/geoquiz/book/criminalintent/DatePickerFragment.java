@@ -1,24 +1,32 @@
 package geoquiz.book.criminalintent;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.print.PrintAttributes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import geoquiz.book.criminalintent.util.Util;
 
 /**
  * Created by jorge.bautista on 17/09/15.
@@ -48,7 +56,7 @@ public class DatePickerFragment extends DialogFragment {
 
 
     @Nullable
-    @Override
+    @Override//For a phone
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         if(getArguments().getBoolean(ARG_IS_TABLET)){
@@ -80,13 +88,17 @@ public class DatePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        if(!getArguments().getBoolean(ARG_IS_TABLET)){
+        if (!getArguments().getBoolean(ARG_IS_TABLET)) {//If this is a phone
+            //Then an activity with it's own button is shown
             return super.onCreateDialog(savedInstanceState);
         }
 
         View datePickerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
         mDatePicker = (DatePicker) datePickerView.findViewById(R.id.dialog_date_date_picker);
         setDateOnTimePicker();
+
+        mOkButton = (Button)datePickerView.findViewById(R.id.ok_button_on);
+        ((ViewManager)mDatePicker.getParent()).removeView(mOkButton);
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.date_picker_title)
