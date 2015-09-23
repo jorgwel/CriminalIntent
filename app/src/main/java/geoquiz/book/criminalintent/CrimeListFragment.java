@@ -16,12 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import geoquiz.book.criminalintent.model.Crime;
 import geoquiz.book.criminalintent.model.CrimeLab;
+import geoquiz.book.criminalintent.util.EmptyRecyclerView;
 
 /**
  * Created by jorge.bautista on 11/09/15.
@@ -32,9 +32,10 @@ public class CrimeListFragment extends Fragment {
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
-    private RecyclerView mCrimeRecyclerView;
+    private EmptyRecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private View mEmptyView;
 
 
     @Override
@@ -110,7 +111,8 @@ public class CrimeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
-        mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
+        mCrimeRecyclerView = (EmptyRecyclerView) view.findViewById(R.id.crime_recycler_view);
+        mEmptyView = view.findViewById(R.id.empty_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if(savedInstanceState != null) {
@@ -130,6 +132,7 @@ public class CrimeListFragment extends Fragment {
         if(mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
+            mCrimeRecyclerView.setEmptyView(mEmptyView);
         } else {
             mAdapter.notifyDataSetChanged();
         }
