@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,14 +38,33 @@ public class CrimeListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item_new_crime:
-                Log.d(TAG, "Botón +Crime");
+                createNewCrime();
                 return true;
+            case R.id.menu_item_show_subtitle:
+                updateSubtitle();
+                return true;
+
 
             default:
                 Log.d(TAG, "Ninguna acción manejada por el menú");
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void updateSubtitle() {
+        CrimeLab cl = CrimeLab.get(getActivity());
+        int numberOfCrimes = cl.getCrimes().size();
+        String newSubtitle = getString(R.string.subtitle_format, numberOfCrimes);
+        AppCompatActivity a = (AppCompatActivity)getActivity();
+        a.getSupportActionBar().setSubtitle(newSubtitle);
+    }
+
+    private void createNewCrime() {
+        Crime newCrime = new Crime();
+        CrimeLab.get(getActivity()).addCrime(newCrime);
+        Intent i = CrimePagerActivity.newIntent(getActivity(), newCrime.getId());
+        startActivity(i);
     }
 
     @Override
