@@ -71,9 +71,13 @@ public class CrimeLab {
 
     private static ContentValues getContentValues(Crime crime){
         ContentValues values = new ContentValues();
-        values.put(CrimeTable.Columns.UUID, crime.getId().toString());
-        values.put(CrimeTable.Columns.TITLE, crime.getTitle().toString());
-        values.put(CrimeTable.Columns.DATE, crime.getDate().getTime());
+        if(crime.getId() != null)
+            values.put(CrimeTable.Columns.UUID, crime.getId().toString());
+        if(crime.getTitle() != null)
+            values.put(CrimeTable.Columns.TITLE, crime.getTitle().toString());
+        if(crime.getDate() != null)
+            values.put(CrimeTable.Columns.DATE, crime.getDate().getTime());
+
         values.put(CrimeTable.Columns.SOLVED, crime.isSolved() ? 1 : 0);
 
         return values;
