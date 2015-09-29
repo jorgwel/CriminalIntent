@@ -43,12 +43,12 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_crime:
                 createNewCrime();
                 return true;
+
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
                 getActivity().invalidateOptionsMenu();
                 updateSubtitle();
                 return true;
-
 
             default:
                 Log.d(TAG, "Ninguna acción manejada por el menú");
@@ -75,6 +75,7 @@ public class CrimeListFragment extends Fragment {
         Crime newCrime = new Crime();
         CrimeLab.get(getActivity()).addCrime(newCrime);
         Intent i = CrimePagerActivity.newIntent(getActivity(), newCrime.getId());
+        Log.d(TAG, "Id is: " + newCrime.getId());
         startActivity(i);
     }
 
@@ -131,6 +132,7 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setCrimes(crimes);
             mAdapter.notifyDataSetChanged();
         }
 
@@ -203,6 +205,11 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
         }
 
 

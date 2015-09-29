@@ -28,6 +28,7 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
         StringBuilder qb = new StringBuilder(150);
         qb.append("create table ").append(CrimeTable.NAME).append("(")
           .append("_id integer primary key autoincrement, ")
+          .append(CrimeTable.Columns.UUID).append(", ")
           .append(CrimeTable.Columns.TITLE).append(", ")
           .append(CrimeTable.Columns.DATE).append(", ")
           .append(CrimeTable.Columns.SOLVED).append(") ");
