@@ -97,7 +97,7 @@ public class CrimeLab {
 
 
     public Crime getCrime(UUID id) {
-        CrimeCursorWrapper cursorWrapper = queryCrimes(CrimeTable.Columns.UUID + " = ?", new String[]{ id.toString() });
+        CrimeCursorWrapper cursorWrapper = queryCrimes(CrimeTable.Columns.UUID + " = ?", new String[]{id.toString()});
 
         try {
 
@@ -116,4 +116,7 @@ public class CrimeLab {
     }
 
 
+    public void deleteCrime(UUID id) {
+        mDataBase.delete(CrimeTable.NAME, CrimeTable.Columns.UUID + " = ?", new String[]{id.toString()});
+    }
 }
