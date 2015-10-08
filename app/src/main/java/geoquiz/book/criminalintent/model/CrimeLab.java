@@ -77,6 +77,8 @@ public class CrimeLab {
             values.put(CrimeTable.Columns.TITLE, crime.getTitle().toString());
         if(crime.getDate() != null)
             values.put(CrimeTable.Columns.DATE, crime.getDate().getTime());
+        if(crime.getSuspect() != null)
+            values.put(CrimeTable.Columns.SUSPECT, crime.getSuspect());
 
         values.put(CrimeTable.Columns.SOLVED, crime.isSolved() ? 1 : 0);
 
@@ -116,7 +118,7 @@ public class CrimeLab {
     }
 
 
-    public void deleteCrime(UUID id) {
-        mDataBase.delete(CrimeTable.NAME, CrimeTable.Columns.UUID + " = ?", new String[]{id.toString()});
+    public void deleteCrime(UUID uuid) {
+        mDataBase.delete(CrimeTable.NAME, CrimeTable.Columns.UUID + " = ?", new String[]{uuid.toString()});
     }
 }

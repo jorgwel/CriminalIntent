@@ -15,7 +15,7 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "CrimeBaseHelper";
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String DATABASE_NAME = "crimeBase.db";
 
     public CrimeBaseHelper(Context context) {
@@ -31,7 +31,8 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
           .append(CrimeTable.Columns.UUID).append(", ")
           .append(CrimeTable.Columns.TITLE).append(", ")
           .append(CrimeTable.Columns.DATE).append(", ")
-          .append(CrimeTable.Columns.SOLVED).append(") ");
+          .append(CrimeTable.Columns.SOLVED).append(", ")
+          .append(CrimeTable.Columns.SUSPECT).append(") ");
 
         db.execSQL(qb.toString());
     }
@@ -39,5 +40,9 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "On method CrimeBaseHelper.onUpgrade");
+
+        Log.d(TAG, "Adding the new SUSPECT column, for chapter 15");
+        db.execSQL("ALTER TABLE crimes ADD COLUMN suspect");
+
     }
 }

@@ -1,4 +1,4 @@
-package geoquiz.book.criminalintent;
+package geoquiz.book.criminalintent.crimefragment;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,6 +15,8 @@ import android.widget.DatePicker;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import geoquiz.book.criminalintent.R;
 
 /**
  * Created by jorge.bautista on 17/09/15.
