@@ -1,6 +1,6 @@
 @startuml
 
-[*] --> ShowingCrimeList: (*) Application starts
+[*] --> ShowingCrimeList: User opens\nthe app
 
 ShowingCrimeList -left-> EditingACrime: Click <b>(+)</b>\nbutton\n- - - - - -\nIn order to\ncreate a Crime
 
@@ -14,6 +14,7 @@ EditingACrime -up-> GettingDateFromPickerModal: Click <i>Date</i>\nbutton
 GettingDateFromPickerModal -> EditingACrime: Click <i>Ok</i>\nbutton
  
 state ShowingCrimeList as "Showing list of crimes"{
+      [*] --> NotShowingNumberOfCrimes: (*)
       NotShowingNumberOfCrimes --> ShowingNumberOfCrimes: Clicking push button\n<i>Show subtitle</i>
       ShowingNumberOfCrimes --> NotShowingNumberOfCrimes
 }
