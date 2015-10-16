@@ -1,4 +1,4 @@
-package geoquiz.book.criminalintent;
+package geoquiz.book.criminalintent.interactions.local;
 
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import junit.framework.Test;
 
 import java.net.URL;
 
+import geoquiz.book.criminalintent.CrimeListActivity;
+import geoquiz.book.criminalintent.CrimePagerActivity;
+import geoquiz.book.criminalintent.R;
 import geoquiz.book.criminalintent.database.CrimeBaseHelper;
 import geoquiz.book.criminalintent.model.Crime;
 
@@ -96,19 +99,31 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
 
 
     /**
-     * Test: User creates a crime
+     * Test: Clicking on the button "Create"
      * - Preconditions: None
-     * - Expected: a user has created a new Crime and the crime list in the main view is already showing it
+     * - Expected: The activity CrimePagerActivity is launched
      */
     public void testUserCreatesACrime(){
 
         Instrumentation.ActivityMonitor crimePagerMonitor = getInstrumentation().addMonitor(CrimePagerActivity.class.getName(), null, false);
         TouchUtils.clickView(this, getActivity().findViewById(R.id.menu_item_new_crime));
-        CrimePagerActivity receiverActivity = (CrimePagerActivity)crimePagerMonitor.waitForActivityWithTimeout(1000);
-        assertNotNull("ReceiverActivity is null", receiverActivity);
-        assertEquals("Monitor for ReceiverActivity has not been called", 1, crimePagerMonitor.getHits());
-        assertEquals("Activity is of wrong type", CrimePagerActivity.class, receiverActivity.getClass());
+        CrimePagerActivity crimePagerActivity = (CrimePagerActivity)crimePagerMonitor.waitForActivityWithTimeout(1000);
+        assertNotNull("CrimePagerActivity is null", crimePagerActivity);
+        assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
+        assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
         getInstrumentation().removeMonitor(crimePagerMonitor);
+
+    }
+
+
+    /**
+     * Test: Clicking on a Crime in the list
+     * - Preconditions: A crime or more are already created
+     * - Expected: The activity CrimePagerActivity is launched
+     */
+    public void testUserOpensACrime(){
+
+        assertTrue("Waiting for the \"Create user\" test to be implemented", false);
 
     }
 
@@ -121,6 +136,14 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
     public void testCrimeList_HasRecords_AtApStart(){
         assertTrue(true);
     }
+
+
+//    \item App is opened and has registered crimes
+//    \begin{enumerate}
+//    \item \textbf{\pre} Some crimes have been registered
+//    \item \textbf{Expected} The application should show the list with the registered crimes
+//    \end{enumerate}
+
 
 
 
