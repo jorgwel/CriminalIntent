@@ -3,22 +3,22 @@ package geoquiz.book.criminalintent.interactions.local;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
-import android.util.Log;
-
-import junit.framework.Test;
-
-import java.net.URL;
 
 import geoquiz.book.criminalintent.CrimeListActivity;
 import geoquiz.book.criminalintent.CrimePagerActivity;
 import geoquiz.book.criminalintent.R;
+import geoquiz.book.criminalintent.TestUtilResources;
 import geoquiz.book.criminalintent.database.CrimeBaseHelper;
-import geoquiz.book.criminalintent.model.Crime;
+import geoquiz.book.criminalintent.model.CrimeLab;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
 /**
@@ -27,6 +27,7 @@ import geoquiz.book.criminalintent.model.Crime;
 public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<CrimeListActivity> {
 
     private final static String TAG = "CrimeListActivityTest";
+    private final UtilMethods mTestUtilMethods = new UtilMethods();
 
     private RecyclerView mCrimeRecyclerView;
     private ActionBar actionBar;
@@ -39,7 +40,7 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        getInstrumentation().getTargetContext().deleteDatabase(CrimeBaseHelper.DATABASE_NAME);
+
     }
 
     /**
@@ -47,9 +48,9 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
      * - Preconditions: None
      * - Expected: the first activity shown is CrimeListActivity
      */
-    public void testCrimeListActivity_being_Shown_AsTheLauncherActivity(){
+    public void testCrimeListActivity_being_Shown_AsTheLauncherActivity() {
         String activityThatShouldBeLaunched = "geoquiz.book.criminalintent.CrimeListActivity";
-        String activityThatIsBeingLaunched = getNameOfLaunchedActivity();
+        String activityThatIsBeingLaunched = mTestUtilMethods.getNameOfLaunchedActivity();
         assertEquals("The launcher activity is wrong", activityThatShouldBeLaunched, activityThatIsBeingLaunched);
     }
 
@@ -58,21 +59,21 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
      * - Preconditions: None
      * - Expected: The number of crimes is not being shown at start
      */
-    public void testSubtitleNotShown_AtAppStart(){
-        assertFalse("The number of crimes is being shown at startup", isNumberOfCrimesShown());
+    public void testSubtitleNotShown_AtAppStart() {
+        TestUtilResources.deleteDatabase(getInstrumentation());
+        assertFalse("The number of crimes is being shown at startup", mTestUtilMethods.isNumberOfCrimesShown());
     }
 
     /**
      * Test: User clicks on "Show subtitle" when the number of crimes is being shown
      * - Preconditions: App is showing the main activity
      * - Expected: The number of crimes is hidden
-     *
+     * <p/>
      * Useful resources: https://developer.android.com/training/activity-testing/activity-functional-testing.html
-     *
      */
-    public void testUserClicksOnShowSubtitleButton_TheNumberOfCrimes_IsShown(){
+    public void testUserClicksOnShowSubtitleButton_TheNumberOfCrimes_IsShown() {
         TouchUtils.clickView(this, getActivity().findViewById(R.id.menu_item_show_subtitle));
-        assertTrue("The number of crimes is NOT being shown at startup", isNumberOfCrimesShown());
+        assertTrue("The number of crimes is NOT being shown at startup", mTestUtilMethods.isNumberOfCrimesShown());
     }
 
     /**
@@ -80,10 +81,10 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
      * - Preconditions: App is showing the main activity
      * - Expected: The number of crimes is hidden
      */
-    public void testUserClicksOnShowSubtitleButton_WhenNumberOfCrimesAreBeingShown_TheNumberOfCrimesAreNot_BeingShown(){
+    public void testUserClicksOnShowSubtitleButton_WhenNumberOfCrimesAreBeingShown_TheNumberOfCrimesAreNot_BeingShown() {
         testUserClicksOnShowSubtitleButton_TheNumberOfCrimes_IsShown();
         TouchUtils.clickView(this, getActivity().findViewById(R.id.menu_item_show_subtitle));
-        assertFalse("The number of crimes is being shown after clicking twice the button \"Show subtitle\"", isNumberOfCrimesShown());
+        assertFalse("The number of crimes is being shown after clicking twice the button \"Show subtitle\"", mTestUtilMethods.isNumberOfCrimesShown());
     }
 
     /**
@@ -91,84 +92,98 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
      * - Preconditions: None
      * - Expected: the application should show the empty view of the list
      */
-    public void testCrimeList_Empty_AtAppStart(){
-        assignRecyclerView();
-        int numberOfItems = mCrimeRecyclerView.getChildCount();
-        assertEquals("The database is not empty at start", numberOfItems, 0);
+    public void testCrimeList_Empty_AtAppStart() {
+        TestUtilResources.deleteDatabase(getInstrumentation());
+        mTestUtilMethods.assignRecyclerView();
+        mTestUtilMethods.verifyNumberOfItemsInListOfCrimes(0);
     }
-
 
     /**
      * Test: Clicking on the button "Create"
      * - Preconditions: None
      * - Expected: The activity CrimePagerActivity is launched
      */
-    public void testUserCreatesACrime(){
+    public void testOpensCrimePagerActivity_When_UserCreatesACrime() {
 
         Instrumentation.ActivityMonitor crimePagerMonitor = getInstrumentation().addMonitor(CrimePagerActivity.class.getName(), null, false);
         TouchUtils.clickView(this, getActivity().findViewById(R.id.menu_item_new_crime));
-        CrimePagerActivity crimePagerActivity = (CrimePagerActivity)crimePagerMonitor.waitForActivityWithTimeout(1000);
-        assertNotNull("CrimePagerActivity is null", crimePagerActivity);
-        assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
-        assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
+        mTestUtilMethods.validateThatCrimePagerActivityWasOpened(crimePagerMonitor);
         getInstrumentation().removeMonitor(crimePagerMonitor);
 
-    }
 
+    }
 
     /**
      * Test: Clicking on a Crime in the list
      * - Preconditions: A crime or more are already created
      * - Expected: The activity CrimePagerActivity is launched
      */
-    public void testUserOpensACrime(){
+    public void testUserOpensACrime() {
 
-        assertTrue("Waiting for the \"Create user\" test to be implemented", false);
+        TestUtilResources.deleteDatabase(getInstrumentation());
+        testOpensCrimePagerActivity_When_UserCreatesACrime();
+        Instrumentation.ActivityMonitor crimePagerMonitor = getInstrumentation().addMonitor(CrimePagerActivity.class.getName(), null, false);
+
+        onView(
+                withId(R.id.crime_recycler_view)
+        ).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, click())
+        );
+
+        mTestUtilMethods.validateThatCrimePagerActivityWasOpened(crimePagerMonitor);
 
     }
-
 
     /**
      * Test: App is opened and has registered crimes
      * - Preconditions: Some crimes have been registered
      * - Expected: the application should show the list with the registered crimes
      */
-    public void testCrimeList_HasRecords_AtApStart(){
+    public void testCrimeList_HasRecords_AtApStart() {
         assertTrue(true);
     }
 
 
-//    \item App is opened and has registered crimes
-//    \begin{enumerate}
-//    \item \textbf{\pre} Some crimes have been registered
-//    \item \textbf{Expected} The application should show the list with the registered crimes
-//    \end{enumerate}
-
-
-
-
-    private boolean isNumberOfCrimesShown() {
-        assignActionBar();
-        return actionBar.getSubtitle() != null;
-    }
-
-    private void assignActionBar() {
-        actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-    }
-
-    private void assignRecyclerView() {
-        mCrimeRecyclerView = (RecyclerView)getActivity().findViewById(R.id.crime_recycler_view);
-    }
-
-    private String getNameOfLaunchedActivity() {
-        PackageManager pm = getInstrumentation().getTargetContext().getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage("geoquiz.book.criminalintent");
-        return intent.getComponent().getClassName();
-    }
-
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
+        getActivity().finish();
+    }
+
+
+    private class UtilMethods {
+
+        boolean isNumberOfCrimesShown() {
+            assignActionBar();
+            return actionBar.getSubtitle() != null;
+        }
+
+        void assignActionBar() {
+            actionBar = getActivity().getSupportActionBar();
+        }
+
+        void assignRecyclerView() {
+            mCrimeRecyclerView = (RecyclerView) getActivity().findViewById(R.id.crime_recycler_view);
+        }
+
+        String getNameOfLaunchedActivity() {
+            PackageManager pm = getInstrumentation().getTargetContext().getPackageManager();
+            Intent intent = pm.getLaunchIntentForPackage("geoquiz.book.criminalintent");
+            return intent.getComponent().getClassName();
+        }
+
+        void verifyNumberOfItemsInListOfCrimes(int numberOfItemsToValidate) {
+            int currentNumberOfItems = CrimeLab.get(getActivity()).getCrimes().size();
+            CrimeListActivityTest.assertEquals("The database is not empty at start", numberOfItemsToValidate, currentNumberOfItems);
+        }
+
+        void validateThatCrimePagerActivityWasOpened(Instrumentation.ActivityMonitor crimePagerMonitor) {
+            CrimePagerActivity crimePagerActivity = (CrimePagerActivity) crimePagerMonitor.waitForActivityWithTimeout(1000);
+            CrimeListActivityTest.assertNotNull("CrimePagerActivity is null", crimePagerActivity);
+            CrimeListActivityTest.assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
+            CrimeListActivityTest.assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
+            crimePagerActivity.finish();
+        }
     }
 
 
