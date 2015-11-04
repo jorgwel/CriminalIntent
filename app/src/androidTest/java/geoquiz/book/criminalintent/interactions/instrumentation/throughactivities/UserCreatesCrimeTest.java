@@ -1,4 +1,4 @@
-package geoquiz.book.criminalintent.interactions.throughactivities;
+package geoquiz.book.criminalintent.interactions.instrumentation.throughactivities;
 
 import android.app.Instrumentation;
 import android.support.test.espresso.contrib.RecyclerViewActions;
@@ -10,7 +10,7 @@ import geoquiz.book.criminalintent.CrimePagerActivity;
 import geoquiz.book.criminalintent.R;
 import geoquiz.book.criminalintent.TestUtilResources;
 import geoquiz.book.criminalintent.database.CrimeBaseHelper;
-import geoquiz.book.criminalintent.interactions.local.CrimeListActivityTest;
+import geoquiz.book.criminalintent.interactions.instrumentation.local.CrimeListActivityTest;
 import geoquiz.book.criminalintent.model.CrimeLab;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -64,7 +64,7 @@ public class UserCreatesCrimeTest extends ActivityInstrumentationTestCase2<Crime
 
     private class UtilMethods {
 
-        private void verifyThatCommingBackFrom_CreateCrime_TheresOneMoreCrime() {
+        void verifyThatCommingBackFrom_CreateCrime_TheresOneMoreCrime() {
             Instrumentation.ActivityMonitor crimePagerMonitor = getInstrumentation()
                     .addMonitor(
                             CrimePagerActivity.class.getName(),
@@ -80,7 +80,7 @@ public class UserCreatesCrimeTest extends ActivityInstrumentationTestCase2<Crime
             getInstrumentation().removeMonitor(crimePagerMonitor);
         }
 
-        private void verifyThatClickingOnCreateButton_YouAreTakenToCrimePagerActivity(UserCreatesCrimeTest userCreatesCrimeTest) {
+        void verifyThatClickingOnCreateButton_YouAreTakenToCrimePagerActivity(UserCreatesCrimeTest userCreatesCrimeTest) {
             Instrumentation.ActivityMonitor crimePagerMonitor = getInstrumentation()
                     .addMonitor(
                             CrimePagerActivity.class.getName(),
@@ -103,9 +103,9 @@ public class UserCreatesCrimeTest extends ActivityInstrumentationTestCase2<Crime
 
         void validateThatCrimePagerActivityWasOpened(Instrumentation.ActivityMonitor crimePagerMonitor) {
             CrimePagerActivity crimePagerActivity = (CrimePagerActivity) crimePagerMonitor.waitForActivityWithTimeout(1000);
-            CrimeListActivityTest.assertNotNull("CrimePagerActivity is null", crimePagerActivity);
-            CrimeListActivityTest.assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
-            CrimeListActivityTest.assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
+            assertNotNull("CrimePagerActivity is null", crimePagerActivity);
+            assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
+            assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
             crimePagerActivity.finish();
         }
 

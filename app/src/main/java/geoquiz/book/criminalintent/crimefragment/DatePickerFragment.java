@@ -58,7 +58,7 @@ public class DatePickerFragment extends DialogFragment {
                         sendResult(Activity.RESULT_OK, date);
                     }
                 })
-                //.setView(R.layout.dialog_date)
+                        //.setView(R.layout.dialog_date)
                 .setView(datePickerView)
                 .create();
     }
@@ -76,13 +76,24 @@ public class DatePickerFragment extends DialogFragment {
     }
 
     private void sendResult(int resultCode, Date date) {
-        if(getTargetFragment() == null) {
+        if (getTargetFragment() == null) {
             return;
         }
 
         Intent i = new Intent();
         i.putExtra(EXTRA_DATE, date);
 
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
+    }
+
+    private void wsendResult(int resultCode, Date date) {
+        if (getTargetFragment() == null) {
+            return;
+        }
+
+        Intent i = new Intent();
+        i.putExtra(EXTRA_DATE, date);
+        
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
     }
 }

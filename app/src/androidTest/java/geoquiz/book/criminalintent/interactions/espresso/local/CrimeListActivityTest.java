@@ -1,4 +1,4 @@
-package geoquiz.book.criminalintent.interactions.local;
+package geoquiz.book.criminalintent.interactions.espresso.local;
 
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -13,7 +13,6 @@ import geoquiz.book.criminalintent.CrimeListActivity;
 import geoquiz.book.criminalintent.CrimePagerActivity;
 import geoquiz.book.criminalintent.R;
 import geoquiz.book.criminalintent.TestUtilResources;
-import geoquiz.book.criminalintent.database.CrimeBaseHelper;
 import geoquiz.book.criminalintent.model.CrimeLab;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -119,7 +118,7 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
      * - Expected: The activity CrimePagerActivity is launched
      */
     public void testUserOpensACrime() {
-
+        getActivity();
         TestUtilResources.deleteDatabase(getInstrumentation());
         testOpensCrimePagerActivity_When_UserCreatesACrime();
         Instrumentation.ActivityMonitor crimePagerMonitor = getInstrumentation().addMonitor(CrimePagerActivity.class.getName(), null, false);
@@ -131,6 +130,7 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
         );
 
         mTestUtilMethods.validateThatCrimePagerActivityWasOpened(crimePagerMonitor);
+        getInstrumentation().removeMonitor(crimePagerMonitor);
 
     }
 
@@ -147,7 +147,7 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-        getActivity().finish();
+//        getActivity().finish();
     }
 
 
@@ -179,9 +179,9 @@ public class CrimeListActivityTest extends ActivityInstrumentationTestCase2<Crim
 
         void validateThatCrimePagerActivityWasOpened(Instrumentation.ActivityMonitor crimePagerMonitor) {
             CrimePagerActivity crimePagerActivity = (CrimePagerActivity) crimePagerMonitor.waitForActivityWithTimeout(1000);
-            CrimeListActivityTest.assertNotNull("CrimePagerActivity is null", crimePagerActivity);
-            CrimeListActivityTest.assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
-            CrimeListActivityTest.assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
+            geoquiz.book.criminalintent.interactions.instrumentation.local.CrimeListActivityTest.assertNotNull("CrimePagerActivity is null", crimePagerActivity);
+            geoquiz.book.criminalintent.interactions.instrumentation.local.CrimeListActivityTest.assertEquals("Monitor for CrimePagerActivity has not been called", 1, crimePagerMonitor.getHits());
+            geoquiz.book.criminalintent.interactions.instrumentation.local.CrimeListActivityTest.assertEquals("Activity is of wrong type", CrimePagerActivity.class, crimePagerActivity.getClass());
             crimePagerActivity.finish();
         }
     }
